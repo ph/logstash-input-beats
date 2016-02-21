@@ -145,7 +145,6 @@ module Lumberjack module Beats
     PROTOCOL_VERSION_1 = "1".ord
     PROTOCOL_VERSION_2 = "2".ord
 
-    SUPPORTED_PROTOCOLS = [PROTOCOL_VERSION_1, PROTOCOL_VERSION_2]
     class UnsupportedProtocol < StandardError; end
 
     def initialize
@@ -173,7 +172,6 @@ module Lumberjack module Beats
     # @return [String, nil] the websocket message payload, if any, nil otherwise.
     def feed(data, &block)
       @buffer << data
-      #p :need => @need
       while have?(@need)
         send(@state, &block)
         #case @state
@@ -242,7 +240,7 @@ module Lumberjack module Beats
     end
 
     def supported_protocol?(version)
-      SUPPORTED_PROTOCOLS.include?(version)
+      PROTOCOL_VERSION_2 == version || PROTOCOL_VERSION_1 == version  
     end
 
     def window_size(&block)
@@ -308,7 +306,8 @@ module Lumberjack module Beats
       transition(:header, 2)
 
       # Parse the uncompressed payload.
-      feed(original, &block)
+      parser = self.class.new
+      parser.feed(original, &block)
     end
   end # class Parser
 
