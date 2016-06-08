@@ -14,8 +14,15 @@ import "java.io.FileInputStream"
 
 
 # Allow Logstash to receive events from Beats
-#
 # https://github.com/elastic/filebeat[filebeat]
+#
+# Example:
+# [source,ruby]
+#     input {
+#       beats{
+#         port => 5555
+#       }
+#     }
 #
 
 class LogStash::Codecs::Base
