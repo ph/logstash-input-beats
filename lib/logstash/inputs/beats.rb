@@ -87,14 +87,11 @@ class LogStash::Inputs::Beats < LogStash::Inputs::Base
 
   # By default the server dont do any client verification,
   # 
-  # `peer` will make the server ask the client to provide a certificate,
-  # if the client provide the certificate it will be validated.
-  #
   # `force_peer` will make the server ask the client for their certificate, if the clients
   # doesn't provide it the connection will be closed.
   #
   # This option need to be used with `ssl_certificate_authorities` and a defined list of CA.
-  config :ssl_verify_mode, :validate => ["none", "peer", "force_peer"], :default => "none"
+  config :ssl_verify_mode, :validate => ["none", "force_peer"], :default => "none"
 
   # The number of seconds before we raise a timeout,
   # this option is useful to control how much time to wait if something is blocking the pipeline.
@@ -144,6 +141,10 @@ class LogStash::Inputs::Beats < LogStash::Inputs::Base
       ssl_builder = org.logstash.netty.SslSimpleBuilder.new(FileInputStream.new(ssl_certificate), private_key_converter.convert(), ssl_key_passphrase)
         .setProtocols(convert_protocols) 
         .setCipherSuites(@cipher_suites)
+
+      if client_authentification?
+        # ssl_builder.setCertificateAuthorities(@ssl_certificate_authorities.first)
+      end
       server.enableSSL(ssl_builder)
     end
 
@@ -172,6 +173,10 @@ class LogStash::Inputs::Beats < LogStash::Inputs::Base
 
   def need_identity_map?
     @codec.kind_of?(LogStash::Codecs::Multiline)
+  end
+
+  def client_authentification?
+    @ssl_verify_mode.downcase == "force_peer"
   end
 
   def convert_protocols
