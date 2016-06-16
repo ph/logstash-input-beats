@@ -184,4 +184,4 @@ class LogStash::Inputs::Beats < LogStash::Inputs::Base
   def convert_protocols
     TLS.get_supported(@tls_min_version..@tls_max_version).map(&:name)
   end
-end # class LogStash::Inputs::Beats
+end
