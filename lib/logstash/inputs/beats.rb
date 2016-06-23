@@ -91,7 +91,7 @@ class LogStash::Inputs::Beats < LogStash::Inputs::Base
   # doesn't provide it the connection will be closed.
   #
   # This option need to be used with `ssl_certificate_authorities` and a defined list of CA.
-  config :ssl_verify_mode, :validate => ["none", "force_peer"], :default => "none"
+  config :ssl_verify_mode, :validate => ["none", "force_peer"], :default => "force_peer"
 
   # The number of seconds before we raise a timeout,
   # this option is useful to control how much time to wait if something is blocking the pipeline.
