@@ -11,7 +11,7 @@ matrix:
       env: LOGSTASH_BRANCH=master
     - rvm: jruby-1.7.25
       env: LOGSTASH_BRANCH=5.x
-    - rvm: jruby-9k
+    - rvm: jruby-9-1.9.0
       env: LOGSTASH_BRANCH=feature/jruby-9k
   allow_failures:
     - rvm: jruby-9k
